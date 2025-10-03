@@ -19,13 +19,13 @@ def extract_filepath(text: str):
 # A chave da API será lida dos "Secrets" da plataforma Streamlit
 try:
     GEMINI_API_KEY = st.secrets
-except:
+except KeyError:
     st.error("Chave de API do Google Gemini não encontrada. Por favor, configure-a nos segredos da aplicação.")
     GEMINI_API_KEY = None
 
 # Inicializa o estado da sessão
 if "messages" not in st.session_state:
-    st.session_state.messages = # <--- LINHA CORRIGIDA
+    st.session_state.messages =
 if "agent_executor" not in st.session_state:
     st.session_state.agent_executor = None
 if "dataframe" not in st.session_state:
@@ -100,3 +100,5 @@ if prompt := st.chat_input("Faça uma pergunta sobre seus dados..."):
                     st.error(error_message)
                     st.session_state.messages.append({"role": "assistant", "content": error_message})
                     
+                    
+
