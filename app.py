@@ -25,7 +25,7 @@ except:
 
 # Inicializa o estado da sessão
 if "messages" not in st.session_state:
-    st.session_state.messages =
+    st.session_state.messages = # <--- LINHA CORRIGIDA
 if "agent_executor" not in st.session_state:
     st.session_state.agent_executor = None
 if "dataframe" not in st.session_state:
@@ -34,9 +34,9 @@ if "dataframe" not in st.session_state:
 with st.sidebar:
     st.header("Configuração")
     st.info("Esta aplicação utiliza o Google Gemini para análise.")
-
+    
     uploaded_file = st.file_uploader("Carregue seu arquivo CSV", type="csv")
-
+    
     if uploaded_file is not None:
         if st.button("Iniciar Análise"):
             if not GEMINI_API_KEY:
@@ -46,13 +46,13 @@ with st.sidebar:
                     try:
                         df = pd.read_csv(uploaded_file)
                         st.session_state.dataframe = df
-
+                        
                         st.session_state.agent_executor = create_eda_agent(
                             df, 
                             "Google Gemini", 
                             GEMINI_API_KEY
                         )
-
+                        
                         st.session_state.messages = [{"role": "assistant", "content": "Agente inicializado com Google Gemini. Estou pronto para analisar!"}]
                         st.success("Agente pronto!")
                     except Exception as e:
@@ -87,7 +87,7 @@ if prompt := st.chat_input("Faça uma pergunta sobre seus dados..."):
                     response = st.session_state.agent_executor.invoke({"input": prompt})
                     response_content = response['output']
                     st.session_state.messages.append({"role": "assistant", "content": response_content})
-
+                    
                     filepath = extract_filepath(response_content)
                     if filepath and os.path.exists(filepath):
                         clean_content = re.sub(r"\s*e salvo em:.*\.png", "", response_content)
@@ -99,3 +99,4 @@ if prompt := st.chat_input("Faça uma pergunta sobre seus dados..."):
                     error_message = f"Ocorreu um erro: {e}"
                     st.error(error_message)
                     st.session_state.messages.append({"role": "assistant", "content": error_message})
+                    
