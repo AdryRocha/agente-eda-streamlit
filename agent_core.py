@@ -29,7 +29,7 @@ def create_eda_agent(df: pd.DataFrame, model_provider: str, api_key: str = None)
         print("Inicializando agente com Google Gemini...")
         if not api_key:
             raise ValueError("Chave de API do Google é necessária para usar o Gemini.")
-        llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=api_key, temperature=0)
+        llm = ChatGoogleGenerativeAI(model="gemini-pro", google_api_key=api_key, temperature=0)
     
     else:
         raise ValueError("Provedor de modelo desconhecido ou não suportado.")
@@ -56,4 +56,5 @@ def create_eda_agent(df: pd.DataFrame, model_provider: str, api_key: str = None)
     return agent_executor
 
 if __name__ == '__main__':
+
     print("Este script agora é destinado a ser executado via 'streamlit run app.py'")
