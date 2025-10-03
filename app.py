@@ -25,7 +25,7 @@ except KeyError:
 
 # Inicializa o estado da sessão
 if "messages" not in st.session_state:
-    st.session_state.messages =
+    st.session_state.messages = []
 if "agent_executor" not in st.session_state:
     st.session_state.agent_executor = None
 if "dataframe" not in st.session_state:
@@ -101,4 +101,5 @@ if prompt := st.chat_input("Faça uma pergunta sobre seus dados..."):
                     st.session_state.messages.append({"role": "assistant", "content": error_message})
                     
                     
+
 
