@@ -1,4 +1,4 @@
-# agent_core.py (Versão Final com Toolkit)
+# agent_core.py (Versão Final com Melhorias de Robustez e Compatibilidade)
 
 import os
 import pandas as pd
@@ -10,7 +10,7 @@ from langchain.agents import AgentExecutor, create_react_agent
 from langchain import hub
 from langchain.memory import ConversationBufferWindowMemory
 
-# Importa a nossa nova classe EDAToolkit
+# Importa a nossa classe EDAToolkit
 from tools import EDAToolkit
 
 load_dotenv()
@@ -29,32 +29,40 @@ def create_eda_agent(df: pd.DataFrame, model_provider: str, api_key: str = None)
         print("Inicializando agente com Google Gemini...")
         if not api_key:
             raise ValueError("Chave de API do Google é necessária para usar o Gemini.")
-        llm = ChatGoogleGenerativeAI(model="gemini-pro", google_api_key=api_key, temperature=0)
+        
+        # --- SUAS SUGESTÕES IMPLEMENTADAS ---
+        # 1. Usando o modelo 'gemini-1.0-pro' para máxima compatibilidade.
+        # 2. Adicionando 'convert_system_message_to_human=True' para robustez.
+        llm = ChatGoogleGenerativeAI(
+            model="gemini-1.0-pro", 
+            google_api_key=api_key, 
+            temperature=0,
+            convert_system_message_to_human=True 
+        )
     
     else:
         raise ValueError("Provedor de modelo desconhecido ou não suportado.")
 
-    # --- MUDANÇA PRINCIPAL: Usando a EDAToolkit ---
-    # 1. Criamos uma instância da nossa caixa de ferramentas, passando o DataFrame.
+    # A criação da caixa de ferramentas permanece a mesma
     toolkit = EDAToolkit(df=df)
-    
-    # 2. Pegamos a lista de ferramentas prontas para uso.
     tools = toolkit.get_tools()
 
-    # O resto do código permanece o mesmo, mas agora é muito mais robusto.
     prompt = hub.pull("hwchase17/react-chat")
     memory = ConversationBufferWindowMemory(k=5, memory_key="chat_history", return_messages=True)
     agent = create_react_agent(llm, tools, prompt)
     
+    # --- SUA SUGESTÃO IMPLEMENTADA ---
+    # 3. Adicionando 'max_iterations' para evitar loops infinitos.
     agent_executor = AgentExecutor(
         agent=agent,
         tools=tools,
         memory=memory,
         verbose=True,
-        handle_parsing_errors=True
+        handle_parsing_errors=True,
+        max_iterations=10 
     )
     return agent_executor
 
 if __name__ == '__main__':
-
     print("Este script agora é destinado a ser executado via 'streamlit run app.py'")
+
