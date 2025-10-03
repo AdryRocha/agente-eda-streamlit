@@ -1,10 +1,10 @@
-# app.py (Versão Híbrida com Seletor de Modelo)
+# app.py (Versão Final para Deploy no GitHub e Streamlit Cloud)
 
 import streamlit as st
 import pandas as pd
 import os
 import re
-from agent_core import create_eda_agent # Importamos a função que também será modificada
+from agent_core import create_eda_agent
 
 st.set_page_config(page_title="Agente Autônomo de EDA", page_icon="🤖", layout="wide")
 st.title("🤖 Agente Autônomo para Análise Exploratória de Dados (EDA)")
@@ -15,51 +15,45 @@ def extract_filepath(text: str):
     match = re.search(pattern, text)
     return match.group(1) if match else None
 
+# --- Gerenciamento de Segredos (API Key) ---
+# A chave da API será lida dos "Secrets" da plataforma Streamlit
+try:
+    GEMINI_API_KEY = st.secrets
+except:
+    st.error("Chave de API do Google Gemini não encontrada. Por favor, configure-a nos segredos da aplicação.")
+    GEMINI_API_KEY = None
+
+# Inicializa o estado da sessão
 if "messages" not in st.session_state:
-    st.session_state.messages = []  # Inicializa como lista vazia
+    st.session_state.messages =
 if "agent_executor" not in st.session_state:
     st.session_state.agent_executor = None
 if "dataframe" not in st.session_state:
     st.session_state.dataframe = None
 
-# --- Barra Lateral (Sidebar) com Novas Opções ---
 with st.sidebar:
-    st.header("1. Configuração do Modelo")
+    st.header("Configuração")
+    st.info("Esta aplicação utiliza o Google Gemini para análise.")
 
-    # --- NOVO: Seletor de Modelo ---
-    model_provider = st.radio(
-        "Escolha o modelo de linguagem:",
-        ("Ollama (Local, 100% Gratuito)", "Google Gemini (API, Gratuito com Chave)")
-    )
-
-    # --- NOVO: Campo Condicional para a Chave de API ---
-    api_key = None
-    if "Gemini" in model_provider:
-        api_key = st.text_input("Insira sua Chave de API do Google AI Studio:", type="password")
-        st.caption("Obtenha sua chave gratuita em [aistudio.google.com](https://aistudio.google.com/app/apikey)")
-
-    st.header("2. Carregue seus Dados")
     uploaded_file = st.file_uploader("Carregue seu arquivo CSV", type="csv")
 
     if uploaded_file is not None:
         if st.button("Iniciar Análise"):
-            # Validação para garantir que a chave foi inserida se Gemini for selecionado
-            if "Gemini" in model_provider and not api_key:
-                st.error("Por favor, insira sua chave de API do Google para usar o Gemini.")
+            if not GEMINI_API_KEY:
+                st.stop()
             else:
                 with st.spinner("Carregando dados e inicializando o agente..."):
                     try:
                         df = pd.read_csv(uploaded_file)
                         st.session_state.dataframe = df
 
-                        # --- NOVO: Passando a escolha do modelo e a chave para o backend ---
                         st.session_state.agent_executor = create_eda_agent(
                             df, 
-                            model_provider, 
-                            api_key
+                            "Google Gemini", 
+                            GEMINI_API_KEY
                         )
 
-                        st.session_state.messages = [{"role": "assistant", "content": f"Agente inicializado com {model_provider}. Estou pronto para analisar!"}]
+                        st.session_state.messages = [{"role": "assistant", "content": "Agente inicializado com Google Gemini. Estou pronto para analisar!"}]
                         st.success("Agente pronto!")
                     except Exception as e:
                         st.error(f"Ocorreu um erro: {e}")
@@ -68,8 +62,7 @@ with st.sidebar:
         st.markdown("### Preview dos Dados")
         st.dataframe(st.session_state.dataframe.head())
 
-# --- A Interface de Chat Principal (não precisa de alterações) ---
-# (O código restante do app.py permanece o mesmo)
+# O restante do código da interface de chat permanece o mesmo
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         filepath = extract_filepath(message["content"])
