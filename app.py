@@ -22,7 +22,7 @@ def extract_filepath(text: str):
 # Se não encontrar, assume que estamos em um ambiente local.
 api_key_from_secrets = None
 try:
-    # Acessa a chave específica dentro do objeto st.secrets
+    # SUA SUGESTÃO IMPLEMENTADA: Acessa a chave específica dentro do objeto st.secrets
     api_key_from_secrets = st.secrets.get("GEMINI_API_KEY")
 except (AttributeError, KeyError):
     # Isso é esperado em um ambiente local sem um arquivo secrets.toml
@@ -65,7 +65,7 @@ with st.sidebar:
 
     if uploaded_file is not None:
         if st.button("Iniciar Análise"):
-            # Validação robusta da chave de API
+            # SUA SUGESTÃO IMPLEMENTADA: Validação robusta da chave de API
             final_api_key = api_key
             if "Gemini" in model_provider and (not final_api_key or final_api_key.strip() == ""):
                 st.error("⚠️ Por favor, insira sua chave de API do Google para usar o Gemini.")
@@ -75,7 +75,7 @@ with st.sidebar:
                         df = pd.read_csv(uploaded_file)
                         st.session_state.dataframe = df
 
-                        # Garante que a chave seja passada como uma string limpa
+                        # SUA SUGESTÃO IMPLEMENTADA: Garante que a chave seja passada como uma string limpa
                         clean_api_key = final_api_key.strip() if final_api_key else None
 
                         st.session_state.agent_executor = create_eda_agent(
@@ -90,6 +90,7 @@ with st.sidebar:
                         st.success("🎉 Agente pronto!")
                     except Exception as e:
                         st.error(f"❌ Ocorreu um erro na inicialização: {e}")
+                        # SUA SUGESTÃO IMPLEMENTADA: Adiciona traceback completo para debug
                         st.code(traceback.format_exc())
 
     if st.session_state.dataframe is not None:
@@ -132,5 +133,6 @@ if prompt := st.chat_input("Faça uma pergunta sobre seus dados..."):
                 except Exception as e:
                     error_message = f"❌ Ocorreu um erro durante a execução: {e}"
                     st.error(error_message)
+                    # SUA SUGESTÃO IMPLEMENTADA: Adiciona traceback completo para debug
                     st.code(traceback.format_exc())
                     st.session_state.messages.append({"role": "assistant", "content": error_message})
