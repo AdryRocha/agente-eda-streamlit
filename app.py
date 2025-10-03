@@ -1,5 +1,4 @@
 # app.py (Versão Final para Deploy no GitHub e Streamlit Cloud)
-
 import streamlit as st
 import pandas as pd
 import os
@@ -18,6 +17,7 @@ def extract_filepath(text: str):
 # --- Gerenciamento de Segredos (API Key) ---
 # A chave da API será lida dos "Secrets" da plataforma Streamlit
 try:
+    # --- CORREÇÃO AQUI: Acessando a chave específica dentro do objeto st.secrets ---
     GEMINI_API_KEY = st.secrets
 except KeyError:
     st.error("Chave de API do Google Gemini não encontrada. Por favor, configure-a nos segredos da aplicação.")
@@ -99,7 +99,6 @@ if prompt := st.chat_input("Faça uma pergunta sobre seus dados..."):
                     error_message = f"Ocorreu um erro: {e}"
                     st.error(error_message)
                     st.session_state.messages.append({"role": "assistant", "content": error_message})
-                    
-                    
+
 
 
