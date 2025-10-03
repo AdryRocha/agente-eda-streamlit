@@ -1,4 +1,5 @@
-# app.py (Versão Final para Deploy no GitHub e Streamlit Cloud)
+# app.py (Versão Final e 100% Corrigida para Deploy)
+
 import streamlit as st
 import pandas as pd
 import os
@@ -15,12 +16,11 @@ def extract_filepath(text: str):
     return match.group(1) if match else None
 
 # --- Gerenciamento de Segredos (API Key) ---
-# A chave da API será lida dos "Secrets" da plataforma Streamlit
 try:
-    # --- CORREÇÃO AQUI: Acessando a chave específica dentro do objeto st.secrets ---
+    # CORREÇÃO FINAL: Acessa a chave específica dentro do objeto st.secrets
     GEMINI_API_KEY = st.secrets
 except KeyError:
-    st.error("Chave de API do Google Gemini não encontrada. Por favor, configure-a nos segredos da aplicação.")
+    st.error("Chave de API 'GEMINI_API_KEY' não encontrada. Verifique a configuração de 'Secrets' no painel do Streamlit Cloud.")
     GEMINI_API_KEY = None
 
 # Inicializa o estado da sessão
@@ -34,9 +34,9 @@ if "dataframe" not in st.session_state:
 with st.sidebar:
     st.header("Configuração")
     st.info("Esta aplicação utiliza o Google Gemini para análise.")
-    
+
     uploaded_file = st.file_uploader("Carregue seu arquivo CSV", type="csv")
-    
+
     if uploaded_file is not None:
         if st.button("Iniciar Análise"):
             if not GEMINI_API_KEY:
@@ -46,13 +46,13 @@ with st.sidebar:
                     try:
                         df = pd.read_csv(uploaded_file)
                         st.session_state.dataframe = df
-                        
+
                         st.session_state.agent_executor = create_eda_agent(
                             df, 
                             "Google Gemini", 
                             GEMINI_API_KEY
                         )
-                        
+
                         st.session_state.messages = [{"role": "assistant", "content": "Agente inicializado com Google Gemini. Estou pronto para analisar!"}]
                         st.success("Agente pronto!")
                     except Exception as e:
@@ -62,7 +62,6 @@ with st.sidebar:
         st.markdown("### Preview dos Dados")
         st.dataframe(st.session_state.dataframe.head())
 
-# O restante do código da interface de chat permanece o mesmo
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         filepath = extract_filepath(message["content"])
@@ -87,7 +86,7 @@ if prompt := st.chat_input("Faça uma pergunta sobre seus dados..."):
                     response = st.session_state.agent_executor.invoke({"input": prompt})
                     response_content = response['output']
                     st.session_state.messages.append({"role": "assistant", "content": response_content})
-                    
+
                     filepath = extract_filepath(response_content)
                     if filepath and os.path.exists(filepath):
                         clean_content = re.sub(r"\s*e salvo em:.*\.png", "", response_content)
@@ -99,6 +98,3 @@ if prompt := st.chat_input("Faça uma pergunta sobre seus dados..."):
                     error_message = f"Ocorreu um erro: {e}"
                     st.error(error_message)
                     st.session_state.messages.append({"role": "assistant", "content": error_message})
-
-
-
