@@ -2,137 +2,112 @@
 
 # Agente Autônomo para Análise Exploratória de Dados (EDA)
 
+(https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://agente-eda-app-adryrocha25.streamlit.app/)
+
 ## Sobre o Projeto
 
 Este projeto consiste em um agente de Inteligência Artificial desenvolvido em Python, capaz de realizar Análise Exploratória de Dados (EDA) em qualquer arquivo CSV. A aplicação possui uma interface web interativa onde o usuário pode conversar com seus dados em linguagem natural, solicitar análises, gerar gráficos e obter conclusões sintetizadas.
 
-## Características
+A aplicação foi implantada na nuvem e pode ser acessada publicamente através do link acima. Adicionalmente, as seções abaixo detalham como executar o projeto em um ambiente local ou via Google Colab.
 
-- Interface web interativa
-- Suporte a múltiplos modelos:
-  - Ollama (local, gratuito)
-  - Google Gemini (API)
-- Análise de arquivos CSV
-- Geração automática de visualizações
-- Processamento em linguagem natural
+Características
+Interface web interativa e acessível via link público.
 
-## Requisitos do Sistema
+Suporte a múltiplos modelos de execução:
 
-- Python 3.10+
-- Ollama (opcional, para modo local)
+Nuvem (Principal): Google Gemini, via Streamlit Community Cloud.
 
-## Configuração Local
+Local (Alternativo): Ollama, para uso privado e offline.
 
-1. Clone o repositório:
+Análise de qualquer arquivo CSV.
 
-    ```powershell
-    git clone https://github.com/seu-usuario/agente-eda.git
-    cd agente-eda
-    ```
+Geração automática de visualizações (histogramas, mapas de calor, etc.).
 
-2. Crie e ative um ambiente virtual:
+Processamento de perguntas em linguagem natural e capacidade de síntese de conclusões.
 
-    ```powershell
-    python -m venv venv
-    .\venv\Scripts\Activate.ps1
-    ```
+Execução Local (Opcional)
+Para executar a aplicação em sua máquina local, siga os passos abaixo.
 
-3. Instale as dependências:
+Requisitos
+Python 3.10+
 
-    ```powershell
-    pip install -r requirements.txt
-    ```
+Ollama (opcional, para usar o modo local)
 
-4. Configure o Ollama (opcional):
+Configuração
+Clone o repositório:
 
-    - Baixe e instale o Ollama de [ollama.com](https://ollama.com)
-    - Execute o modelo:
+Bash
 
-    ```powershell
-    ollama run llama2
-    ```
+git clone https://github.com/AdryRocha/agente-eda-streamlit.git
+cd agente-eda-streamlit
+Crie e ative um ambiente virtual:
 
-## Como Usar Localmente
+Bash
 
-1. Inicie a aplicação:
+# Criar o ambiente
+python -m venv venv
 
-    ```powershell
-    streamlit run app.py
-    ```
+# Ativar no Windows (PowerShell)
+.\venv\Scripts\Activate.ps1
 
-2. Escolha o modelo:
+# Ativar no macOS/Linux
+source venv/bin/activate
 
-    - Ollama (Local, 100% Gratuito)
-    - Google Gemini (requer API key)
+Instale as dependências:
 
-3. Carregue seus dados:
+Bash
 
-    - Faça upload do arquivo CSV
-    - Clique em "Iniciar Análise"
+pip install -r requirements.txt
+Configure o Ollama (se for usar o modo local):
 
-4. Comece a análise:
+Baixe e instale o Ollama em ollama.com.
 
-    - Use o chat para fazer perguntas sobre seus dados
-    - Solicite visualizações e análises estatísticas
-    - Obtenha insights em linguagem natural
+Execute o seguinte comando no terminal para baixar o modelo correto:
 
-## Configurações Adicionais
+Bash
 
-- Para usar o Google Gemini, obtenha uma chave API em [Google AI Studio](https://aistudio.google.com/app/apikey)
-- O Ollama deve estar em execução para usar o modo local
+ollama run llama3:8b
+Como Usar Localmente
+Inicie a aplicação:
 
-## Execução via Google Colab
+Bash
 
-Para testar o agente sem instalações locais, siga este guia detalhado.
+streamlit run app.py
+A aplicação abrirá no seu navegador. Na barra lateral, escolha o modelo (Ollama ou Gemini), carregue seu arquivo CSV e inicie a análise.
 
-### Requisitos do Colab
+Execução via Google Colab (Opcional)
+Para testar o agente em um ambiente na nuvem sem instalações locais, siga este guia.
 
+Requisitos do Colab
 Você precisará de duas chaves gratuitas:
 
-1. **Chave API do Google Gemini**
-    - Acesse [Google AI Studio](https://aistudio.google.com/app/apikey)
-    - Faça login e clique em "Create API key"
-    - Copie a chave gerada
+Chave de API do Google Gemini: Obtenha em(https://aistudio.google.com/app/apikey).
 
-2. **Authtoken do ngrok**
-    - Crie uma conta em [ngrok.com](https://ngrok.com)
-    - No dashboard, acesse "Your Authtoken"
-    - Copie o token
+Authtoken do ngrok: Crie uma conta em ngrok.com e copie o token do seu dashboard.
 
-### Instruções de Execução
+Instruções de Execução
+Abrir o Notebook:
 
-1. **Abrir o Notebook**
-    - Acesse o [Google Colab](https://colab.research.google.com)
-    - Vá em "Arquivo" -> "Fazer upload de notebook..."
-    - Selecione `Executar_Agente_EDA.ipynb`
+Acesse o Google Colab.
 
-2. **Executar Células de Configuração**
-    - Execute as células em ordem (Shift + Enter)
-    - Célula 1: Instala dependências
-    - Células 2-4: Criam arquivos do projeto
+Vá em "Arquivo" -> "Fazer upload de notebook..." e selecione o arquivo Executar_Agente_EDA.ipynb (se fornecido).
 
-3. **Configurar e Iniciar**
-    - Na Célula 5, substitua:
+Executar as Células:
 
-    ```python
-    NGROK_AUTH_TOKEN = "COLE_SEU_AUTHTOKEN_DO_NGROK_AQUI"
-    ```
+Execute as células do notebook em ordem. A primeira instala as dependências, e as seguintes criam os arquivos do projeto.
 
-    - Execute a célula
-    - Aguarde a URL pública ser gerada
+Configurar e Iniciar:
 
-4. **Usar o Agente**
-    - Clique na URL gerada
-    - Insira sua chave API do Gemini
-    - Faça upload do arquivo CSV
-    - Inicie a análise via chat
+Na última célula, substitua o placeholder pelo seu Authtoken do ngrok:
 
-### Informações Importantes
+Python
 
-- O link é temporário e funciona apenas enquanto o Colab estiver ativo
-- A execução é totalmente na nuvem, sem necessidade de instalações locais
-- Recomendado usar o Chrome para melhor compatibilidade
+NGROK_AUTH_TOKEN = "COLE_SEU_AUTHTOKEN_DO_NGROK_AQUI"
+Execute a célula e aguarde a URL pública ser gerada.
 
-## Licença
+Usar o Agente:
 
+Clique na URL gerada, insira sua chave de API do Gemini na interface, faça o upload do arquivo CSV e inicie a análise.
+
+Licença
 MIT
