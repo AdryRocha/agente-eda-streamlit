@@ -91,7 +91,7 @@ Abrir o Notebook:
 
 ### Acesse o Google Colab.
 
-Vá em "Arquivo" -> "Fazer upload de notebook..." e selecione o arquivo Executar_Agente_EDA.ipynb (se fornecido).
+Vá em "Arquivo" -> "Fazer upload de notebook..." e selecione o arquivo Executar_Agente_EDA.ipynb (fornecido).
 
 ### Executar as Células:
 
