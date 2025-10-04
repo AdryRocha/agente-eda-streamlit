@@ -2,7 +2,7 @@
 
 # Agente Autônomo para Análise Exploratória de Dados (EDA)
 
-(https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://agente-eda-app-adryrocha25.streamlit.app/)
+[https://static.streamlit.io/badges/streamlit_badge_black_white.svg](https://agente-eda-app-adryrocha25.streamlit.app/)
 
 ## Sobre o Projeto
 
