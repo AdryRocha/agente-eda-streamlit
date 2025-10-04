@@ -110,4 +110,5 @@ Usar o Agente:
 Clique na URL gerada, insira sua chave de API do Gemini na interface, faça o upload do arquivo CSV e inicie a análise.
 
 Licença
+
 MIT
