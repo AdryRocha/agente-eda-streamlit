@@ -5,6 +5,7 @@ import pandas as pd
 import os
 import re
 import traceback
+from google.api_core.exceptions import ResourceExhausted
 from agent_core import create_eda_agent
 
 st.set_page_config(page_title="Agente Autônomo de EDA", page_icon="🤖", layout="wide")
@@ -134,6 +135,21 @@ if prompt := st.chat_input("Faça uma pergunta sobre seus dados..."):
                         st.image(filepath)
                     else:
                         st.markdown(response_content)
+               except ResourceExhausted:
+                    error_message = (
+                        "⏳ O limite temporário do plano gratuito do Gemini foi atingido. "
+                        "Aguarde cerca de 30 segundos e tente novamente."
+                    )
+                
+                    st.warning(error_message)
+                
+                    st.session_state.messages.append(
+                        {
+                            "role": "assistant",
+                            "content": error_message
+                        }
+                    )
+                
                 except Exception as e:
                     error_message = (
                         "❌ Não foi possível concluir a análise. "
@@ -146,5 +162,8 @@ if prompt := st.chat_input("Faça uma pergunta sobre seus dados..."):
                     traceback.print_exc()
                 
                     st.session_state.messages.append(
-                        {"role": "assistant", "content": error_message}
+                        {
+                            "role": "assistant",
+                            "content": error_message
+                        }
                     )
