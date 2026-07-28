@@ -89,9 +89,13 @@ with st.sidebar:
                         ]
                         st.success("🎉 Agente pronto!")
                     except Exception as e:
-                        st.error(f"❌ Ocorreu um erro na inicialização: {e}")
-                        # SUA SUGESTÃO IMPLEMENTADA: Adiciona traceback completo para debug
-                        st.code(traceback.format_exc())
+                        st.error(
+                            "❌ Não foi possível inicializar o agente. "
+                            "Verifique a configuração do modelo e tente novamente."
+                        )
+
+                        # O erro completo aparece apenas nos logs do Streamlit.
+                        traceback.print_exc()
 
     if st.session_state.dataframe is not None:
         st.markdown("### 📊 Preview dos Dados")
@@ -131,8 +135,16 @@ if prompt := st.chat_input("Faça uma pergunta sobre seus dados..."):
                     else:
                         st.markdown(response_content)
                 except Exception as e:
-                    error_message = f"❌ Ocorreu um erro durante a execução: {e}"
+                    error_message = (
+                        "❌ Não foi possível concluir a análise. "
+                        "Verifique a configuração do modelo e tente novamente."
+                    )
+                
                     st.error(error_message)
-                    # SUA SUGESTÃO IMPLEMENTADA: Adiciona traceback completo para debug
-                    st.code(traceback.format_exc())
-                    st.session_state.messages.append({"role": "assistant", "content": error_message})
+                
+                    # O erro completo aparece apenas nos logs do Streamlit.
+                    traceback.print_exc()
+                
+                    st.session_state.messages.append(
+                        {"role": "assistant", "content": error_message}
+                    )
