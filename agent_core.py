@@ -34,7 +34,7 @@ def create_eda_agent(df: pd.DataFrame, model_provider: str, api_key: str = None)
         # 1. Usando o modelo 'gemini-1.0-pro' para máxima compatibilidade.
         # 2. Adicionando 'convert_system_message_to_human=True' para robustez.
         llm = ChatGoogleGenerativeAI(
-            model="gemini-2.0-flash-exp", 
+            model="gemini-3.6-flash", 
             google_api_key=api_key, 
             temperature=0,
             convert_system_message_to_human=True 
