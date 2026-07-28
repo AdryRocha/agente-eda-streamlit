@@ -121,49 +121,66 @@ if prompt := st.chat_input("Faça uma pergunta sobre seus dados..."):
     if st.session_state.agent_executor is None:
         st.warning("⚠️ Por favor, carregue um arquivo CSV e clique em 'Iniciar Análise'.")
     else:
-        with st.chat_message("assistant"):
-            with st.spinner("🤔 Pensando..."):
-                try:
-                    response = st.session_state.agent_executor.invoke({"input": prompt})
-                    response_content = response['output']
-                    st.session_state.messages.append({"role": "assistant", "content": response_content})
+       with st.chat_message("assistant"):
+    with st.spinner("Pensando..."):
+        try:
+            response = st.session_state.agent_executor.invoke(
+                {"input": prompt}
+            )
 
-                    filepath = extract_filepath(response_content)
-                    if filepath and os.path.exists(filepath):
-                        clean_content = re.sub(r"\s*e salvo em:.*\.png", "", response_content)
-                        st.markdown(clean_content)
-                        st.image(filepath)
-                    else:
-                        st.markdown(response_content)
-               except ResourceExhausted:
-                    error_message = (
-                        "⏳ O limite temporário do plano gratuito do Gemini foi atingido. "
-                        "Aguarde cerca de 30 segundos e tente novamente."
-                    )
-                
-                    st.warning(error_message)
-                
-                    st.session_state.messages.append(
-                        {
-                            "role": "assistant",
-                            "content": error_message
-                        }
-                    )
-                
-                except Exception as e:
-                    error_message = (
-                        "❌ Não foi possível concluir a análise. "
-                        "Verifique a configuração do modelo e tente novamente."
-                    )
-                
-                    st.error(error_message)
-                
-                    # O erro completo aparece apenas nos logs do Streamlit.
-                    traceback.print_exc()
-                
-                    st.session_state.messages.append(
-                        {
-                            "role": "assistant",
-                            "content": error_message
-                        }
-                    )
+            response_content = response["output"]
+
+            st.session_state.messages.append(
+                {
+                    "role": "assistant",
+                    "content": response_content
+                }
+            )
+
+            filepath = extract_filepath(response_content)
+
+            if filepath and os.path.exists(filepath):
+                clean_content = re.sub(
+                    r"\s*e salvo em:.*\.png",
+                    "",
+                    response_content
+                )
+
+                st.markdown(clean_content)
+                st.image(filepath)
+
+            else:
+                st.markdown(response_content)
+
+        except ResourceExhausted:
+            error_message = (
+                "⏳ O limite temporário do plano gratuito do Gemini "
+                "foi atingido. Aguarde cerca de 30 segundos e tente novamente."
+            )
+
+            st.warning(error_message)
+
+            st.session_state.messages.append(
+                {
+                    "role": "assistant",
+                    "content": error_message
+                }
+            )
+
+        except Exception as e:
+            error_message = (
+                "❌ Não foi possível concluir a análise. "
+                "Verifique a configuração do modelo e tente novamente."
+            )
+
+            st.error(error_message)
+
+            # O erro completo aparece apenas nos logs do Streamlit.
+            traceback.print_exc()
+
+            st.session_state.messages.append(
+                {
+                    "role": "assistant",
+                    "content": error_message
+                }
+            ) 
