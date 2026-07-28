@@ -28,12 +28,14 @@ class EDAToolkit:
         return str(self.df.describe())
 
     def get_column_value_counts(self, column_name: str) -> str:
+        column_name = str(column_name).strip().strip("'\"")
         """Retorna contagem de valores únicos em uma coluna."""
         if column_name not in self.df.columns:
             return f"Erro: Coluna '{column_name}' não encontrada no dataset."
         return str(self.df[column_name].value_counts().head())
 
     def plot_histogram(self, column_name: str) -> str:
+        column_name = str(column_name).strip().strip("'\"")
         """Gera histograma de uma coluna."""
         try:
             if column_name not in self.df.columns:
