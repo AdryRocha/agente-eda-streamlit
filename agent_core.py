@@ -31,7 +31,7 @@ def create_eda_agent(df: pd.DataFrame, model_provider: str, api_key: str = None)
             raise ValueError("Chave de API do Google é necessária para usar o Gemini.")
         
         # --- SUAS SUGESTÕES IMPLEMENTADAS ---
-        # 1. Usando o modelo 'gemini-1.0-pro' para máxima compatibilidade.
+        # 1. Usando o modelo estável atual da API Gemini.
         # 2. Adicionando 'convert_system_message_to_human=True' para robustez.
         llm = ChatGoogleGenerativeAI(
             model="gemini-3.6-flash", 
